@@ -90,4 +90,10 @@ class Main extends CI_Controller
         unset($_SESSION['name']);
         redirect('Main');
     }
+
+    public function out()
+    {
+        session_destroy();
+        redirect("Main");
+    }
 }

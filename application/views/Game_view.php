@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
@@ -40,10 +40,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<!-- Left navbar links -->
 					<ul class="navbar-nav">
 						<li class="nav-item">
-							<a href="index3.html" class="nav-link">Home</a>
+							<a href="#" class="nav-link">Gold</a>
 						</li>
 						<li class="nav-item">
-							<a href="#" class="nav-link">Contact</a>
+							<a href="#" class="nav-link gold">0</a>
 						</li>
 						<li class="nav-item dropdown">
 							<a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
@@ -98,94 +98,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 				<!-- Right navbar links -->
 				<ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-					<!-- Messages Dropdown Menu -->
-					<li class="nav-item dropdown">
-						<a class="nav-link" data-toggle="dropdown" href="#">
-							<i class="fas fa-comments"></i>
-							<span class="badge badge-danger navbar-badge">3</span>
-						</a>
-						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-							<a href="#" class="dropdown-item">
-								<!-- Message Start -->
-								<div class="media">
-									<img src="../../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-									<div class="media-body">
-										<h3 class="dropdown-item-title">
-											Brad Diesel
-											<span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-										</h3>
-										<p class="text-sm">Call me whenever you can...</p>
-										<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-									</div>
-								</div>
-								<!-- Message End -->
-							</a>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<!-- Message Start -->
-								<div class="media">
-									<img src="../../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-									<div class="media-body">
-										<h3 class="dropdown-item-title">
-											John Pierce
-											<span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-										</h3>
-										<p class="text-sm">I got your message bro</p>
-										<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-									</div>
-								</div>
-								<!-- Message End -->
-							</a>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<!-- Message Start -->
-								<div class="media">
-									<img src="../../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-									<div class="media-body">
-										<h3 class="dropdown-item-title">
-											Nora Silvester
-											<span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-										</h3>
-										<p class="text-sm">The subject goes here</p>
-										<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-									</div>
-								</div>
-								<!-- Message End -->
-							</a>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-						</div>
-					</li>
-					<!-- Notifications Dropdown Menu -->
-					<li class="nav-item dropdown">
-						<a class="nav-link" data-toggle="dropdown" href="#">
-							<i class="far fa-bell"></i>
-							<span class="badge badge-warning navbar-badge">15</span>
-						</a>
-						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-							<span class="dropdown-header">15 Notifications</span>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<i class="fas fa-envelope mr-2"></i> 4 new messages
-								<span class="float-right text-muted text-sm">3 mins</span>
-							</a>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<i class="fas fa-users mr-2"></i> 8 friend requests
-								<span class="float-right text-muted text-sm">12 hours</span>
-							</a>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<i class="fas fa-file mr-2"></i> 3 new reports
-								<span class="float-right text-muted text-sm">2 days</span>
-							</a>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-						</div>
-					</li>
 					<li class="nav-item">
-						<a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-							<i class="fas fa-th-large"></i>
+						<a class="nav-link btn btn-danger" data-widget="control-sidebar" data-slide="true" href="<?=site_url("Main/out")?>" role="button">
+							Keluar
 						</a>
 					</li>
 				</ul>
@@ -282,7 +197,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 									<p class="card-text">With supporting text below as a natural lead-in to additional
 										content.</p>
-									<a href="#" class="btn btn-primary">Go somewhere</a>
+									<a href="#" class="btn btn-primary test">Go somewhere</a>
 								</div>
 							</div>
 
@@ -345,8 +260,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		var id_room = "<?=$_SESSION['id_room']?>"
 		var nama = "<?=$_SESSION['nama']?>"
 
+		// Variable Game
+		var gold = <?=$gold?>;
+		var level = <?=$level?>;
+		var hp = <?=$hp?>;
+		var mana = <?=$mana?>;
+		var str = <?=$str?>;
+		var tidur = <?=$tidur?>;
+		var def = <?=$def?>;
+
+		setInterval(() => {
+			gold += level * 2
+			$(".gold").text(gold)
+		}, 1000);
+
+		setInterval(() => {
+			let url = "<?=site_url("Game/insertAttribut")?>"
+			$.post(url,{
+				id:id_user,
+				gold:gold,
+				level:level,
+				hp:hp,
+				mana:mana,
+				str:str,
+				tidur:tidur,
+				def:def
+			})
+		}, 5000);
+
 		// Reload Chat Interval setiap 1 detik
 		setInterval(() => {
+			let msgBox = document.querySelector("#chat_content")
 			$.ajax({
 				url: url,
 				type: "POST",
@@ -367,12 +311,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					})
 				}
 			})
-		}, 5000);
+			msgBox.scrollTop = msgBox.scrollHeight
+		}, 1000);
 
 		// Fungsi Chat
 		$("#sendMsg").click(function(){
 			let pesan = $("#msg").val();
 			let url = "<?=site_url('Game/sendChat')?>";
+			let msgBox = document.querySelector("#chat_content")
 			$.post(url,
 			{
 				id_user: id_user,
@@ -381,24 +327,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				public: 1
 			})
 			$("#msg").val("")
+			msgBox.scrollTop = msgBox.scrollHeight
 		})
 
 		// Notification Setelah Membeli Item
-		$("#btnFireBall").click(function(){
-			let msg = nama+" Telah Mempelajari Skill Fire Ball"
-			notifChat(msg)
+		$(".test").click(function(){
+			if (gold >= 300) {
+				gold -= 300;
+				let msg = nama+" Telah Mempelajari Skill Fire Ball"
+				notifChat(msg)
+			}
 		})
 
 		// Fungsi Untuk Push Notification
 		function notifChat(notif){
 			let url = "<?=site_url('Game/sendChat')?>";
 			let chat = notif
+			let msgBox = document.querySelector("#chat_content")
 			$.post(url,{
 				id_user: id_user,
 				id_room: id_room,
 				chat: chat,
 				public: 1
 			})
+			msgBox.scrollTop = msgBox.scrollHeight
 		}
 	})
 </script>
