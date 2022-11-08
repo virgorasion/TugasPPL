@@ -47,7 +47,7 @@ class Main extends CI_Controller
             $cek_ruang = $this->Main_model->get('*','room',['kode'=>$inpt['kode_ruang']])->num_rows();
             if ($cek_ruang > 0) {
                 $id_room = $this->Main_model->get("*","room","kode =".$inpt['kode_ruang'])->result();
-                $insert_user_in_room = $this->Main_model->insert("user_in_room",['id_room'=>$id_room[0]->id_room,'id_user'=>$id_user]);
+                $insert_user_in_room = $this->gitMain_model->insert("user_in_room",['id_room'=>$id_room[0]->id_room,'id_user'=>$id_user]);
                 $_SESSION['id_room'] = $id_room[0]->id_room;
                 $_SESSION['id_user_in_room'] = $insert_user_in_room;
                 $_SESSION['kode_ruang'] = $inpt['kode_ruang'];
@@ -65,8 +65,8 @@ class Main extends CI_Controller
         }else{
             $id_user = $this->Main_model->insert("user",['nama'=>$inpt['nama']]);
             $kode_ruang = $this->buat_ruang();
-            $insert_room = $this->Main_model->insert("user_in_room",['id_room'=>$id_ruang[1],'id_user'=>$id_user]);
-            $_SESSION['id_room'] = $id_ruang[1];
+            $insert_room = $this->Main_model->insert("user_in_room",['id_room'=>$kode_ruang[1],'id_user'=>$id_user]);
+            $_SESSION['id_room'] = $kode_ruang[1];
             $_SESSION['nama'] = $inpt['nama'];
             $_SESSION['id_user'] = $id_user;
             $_SESSION['id_user_in_room'] = $insert_user_in_room;

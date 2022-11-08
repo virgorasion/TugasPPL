@@ -22,4 +22,19 @@ class Game_model extends CI_Model
         return $this->db->insert($table,$data);
     }
 
+    public function getFood()
+    {
+        return $this->db->get("food")->result();
+    }
+
+    public function getItem()
+    {
+        return $this->db->get("item")->result();
+    }
+
+    public function getSkill()
+    {
+        return $this->db->get("skill")->result();
+    }
+
 }
