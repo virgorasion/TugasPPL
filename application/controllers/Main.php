@@ -55,7 +55,7 @@ class Main extends CI_Controller
             }else{
                 $id_ruang = $this->Main_model->insert("room",['kode'=>$inpt['kode_ruang']]);
                 $insert_room = $this->Main_model->insert("user_in_room",['id_room'=>$id_ruang,'id_user'=>$id_user]);
-                $_SESSION['id_room'] = $id_room;
+                $_SESSION['id_room'] = $id_ruang;
                 $_SESSION['nama'] = $inpt['nama'];
                 $_SESSION['id_user'] = $id_user;
                 $_SESSION['id_user_in_room'] = $insert_room;
@@ -65,13 +65,13 @@ class Main extends CI_Controller
         }else{
             $id_user = $this->Main_model->insert("user",['nama'=>$inpt['nama']]);
             $kode_ruang = $this->buat_ruang();
-            $insert_room = $this->Main_model->insert("user_in_room",['id_room'=>$id_ruang[1],'id_user'=>$id_user]);
-            $_SESSION['id_room'] = $id_ruang[1];
+            $insert_room = $this->Main_model->insert("user_in_room",['id_room'=>$kode_ruang[1],'id_user'=>$id_user]);
+            $_SESSION['id_room'] = $kode_ruang[1];
             $_SESSION['nama'] = $inpt['nama'];
             $_SESSION['id_user'] = $id_user;
-            $_SESSION['id_user_in_room'] = $insert_user_in_room;
-            $_SESSION['kode_ruang'] = $kode_ruang;
-            redirect(site_url('Main/Room/'.$kode_ruang[1]));
+            $_SESSION['id_user_in_room'] = $insert_room;
+            $_SESSION['kode_ruang'] = $kode_ruang[0];
+            redirect(site_url('Main/Room/'.$kode_ruang[0]));
         }
     }
 
