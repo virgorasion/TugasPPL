@@ -284,6 +284,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   var html = ''
                   var ready = 0
                   var user = data.length
+                  let image = "<?=base_url('assets/p1.png')?>"
                   $.each(data,function(i){
                       html += `<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                                   <div class="card bg-light d-flex flex-fill">
@@ -297,7 +298,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                           <p class="text-sm"`+((data[i].ready == 1)?'':'style="display:none"')+`><b class="btn btn-success">Sudah Siap</b></p>
                                           </div>
                                           <div class="col-5 text-center">
-                                          <img src="../../dist/img/user1-128x128.jpg" alt="user-avatar" class="img-circle img-fluid">
+                                          <img src="`+image+`" alt="user-avatar" class="img-circle img-fluid">
                                           </div>
                                       </div>
                                       </div>

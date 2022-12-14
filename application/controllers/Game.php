@@ -13,12 +13,8 @@ class Game extends CI_Controller
     public function index($kode)
     {
         $food = $this->Game_model->getFood();
-        $item = $this->Game_model->getItem();
-        $skill = $this->Game_model->getSkill();
         $user = $this->Game_model->getUser($_SESSION['id_user']);
         $data['food_item'] = $food;
-        $data['item_item'] = $item;
-        $data['skill_item'] = $skill;
         $data['nama'] = $user[0]->nama;
         $data['gold'] = $user[0]->gold;
         $data['hp'] = $user[0]->hp;
@@ -28,6 +24,23 @@ class Game extends CI_Controller
         $data['level'] = $user[0]->level;
         $data['def'] = $user[0]->def;
         $this->load->view("Game_view",$data);
+    }
+
+    public function getStoreItem()
+    {
+        $data = $this->Game_model->getItem($_SESSION['id_user']);
+        echo json_encode($data);
+    }
+    public function getStoreSkill()
+    {
+        $data = $this->Game_model->getSkill($_SESSION['id_user']);
+        echo json_encode($data);
+    }
+
+    public function test()
+    {
+        $data = $this->Game_model->getItem(11);
+        echo json_encode($data);
     }
 
     public function chat($idRoom)
@@ -72,43 +85,33 @@ class Game extends CI_Controller
     public function buy()
     {
         $p = $this->input->post();
-        if ($p == "food"){
-            // Proses Update User
-            $table = "user";
-            $data = [
-                'hp'=>$p['hp'],
-                'mana'=>$p['mp']
-            ];
-            $where = ['id'=>$p['id_user']];
-            return $this->Main_model->update($table,$data,$where);
-        }elseif ($p == "equip") {
+        $level = (int)$p['level'] + 1;
+       if ($p["type"] == "equip") {
             // Proses Autorisasi Item Ke User
             $table = "item_user";
             $data = [
                 'id_user'=>$p['id_user'],
+                'id_item'=>$p['id_item'],
+                'level'=>$level
+            ];
+            $where = [
+                'id_user'=>$p['id_user'],
                 'id_item'=>$p['id_item']
             ];
-            return $this->Main_model->insert($table,$data);
-
-            // // Proses Update User
-            // $table = "user";
-            // $data = [
-            //     'hp'=>$p['hp'],
-            //     'mana'=>$p['mp'],
-            //     'def'=>$p['def'],
-            //     'str'=>$p['str']
-            // ];
-            // $where = ['id'=>$p['id_user']];
-            // $update_user = $this->Main_model->update($table,$data,$where);
-            // return [$insert_item,$update_user];
-        }elseif ($p == "skill") {
+            return $this->Game_model->setData($table,$data,$where);
+        }elseif ($p["type"] == "skill") {
             // Proses Insert Skill
             $table = "skill_user";
             $data = [
                 'id_user'=>$p['id_user'],
-                'id_skill'=>$p['id_skill']
+                'id_skill'=>$p['id_item'],
+                'level'=>$level
             ];
-            return $this->Main_model->insert($table,$data);
+            $where = [
+                'id_user'=>$p['id_user'],
+                'id_skill'=>$p['id_item']
+            ];
+            return $this->Game_model->setData($table,$data,$where);
         }
     }
 }

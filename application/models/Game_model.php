@@ -27,14 +27,61 @@ class Game_model extends CI_Model
         return $this->db->get("food")->result();
     }
 
-    public function getItem()
+    public function getItem($id_user)
     {
-        return $this->db->get("item")->result();
+        return $this->db->select("item.*,(select level from item_user where id_user = $id_user and item.id = item_user.id_item) as level")
+                        ->from("item")
+                        ->get()
+                        ->result();
     }
 
-    public function getSkill()
+    public function getSkill($id_user)
     {
-        return $this->db->get("skill")->result();
+        return $this->db->select("skill.*,(select level from skill_user where id_user = $id_user and skill.id = skill_user.id_skill) as level")
+                        ->from("skill")
+                        ->get()
+                        ->result();
+    }
+
+    public function setData($table,$data,$where){
+        $this->db->delete($table,$where);
+        return $this->db->insert($table,$data);
+    }
+
+    public function getDataUserTurnamen($kodeRoom)
+    {
+        return $this->db->select("user.*")
+                ->from("user")
+                ->join("user_in_room","user_in_room.id_user = user.id")
+                ->join("room","room.id_room = user_in_room.id_room")
+                ->where("room.kode",$kodeRoom)
+                ->get()
+                ->result();
+    }
+
+    public function getDataItemUser($idUser)
+    {
+        return $this->db->select("item.*,item_user.level")
+                        ->from("item")
+                        ->join("item_user","item_user.id_item = item.id")
+                        ->where("item_user.id_user",$idUser)
+                        ->get()
+                        ->result();
+    }
+
+    public function getDataSkillUser($idUser)
+    {
+        return $this->db->select("skill.*,skill_user.level")
+                        ->from("skill")
+                        ->join("skill_user","skill_user.id_skill = skill.id")
+                        ->where("skill_user.id_user",$idUser)
+                        ->get()
+                        ->result();
+    }
+
+    public function checkUserWin($kodeRoom)
+    {
+        return $this->db->select("*")->from("tournamen")->where("room",$kodeRoom)->get()->result();
     }
 
 }

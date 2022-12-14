@@ -266,114 +266,79 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </body>
 <script>
     $(function() {
-        var url = "<?=site_url('Turnamen/dataUserTurnamen/'.$_SESSION['kode_ruang'])?>"
+        var url = "<?=site_url('Turnamen/getVsUser/'.$_SESSION['kode_ruang'])?>"
+        var getDataUser = "<?=site_url('Turnamen/gameplay')?>"
         var id_user = parseInt("<?=$_SESSION['id_user']?>")
-              $.ajax({
-              url:url,
-              type:'POST',
-              success: function(result){
-                  var data = JSON.parse(result)
-				  allData = data
-				//   console.log(allData)
-                  var html = ''
-				  var img = "<?=base_url('assets/p1.png')?>"
-				  var user = data.length
-                  $.each(data,function(i){
-                      html += `<div class="col-12 col-sm-3 col-md-3 d-flex align-items-stretch flex-column">
-								<div class="card bg-light d-flex flex-fill">
-									<div class="card-header text-muted border-bottom-0">
-										Pemain `+parseInt(i+1)+`
-									</div>
-									<div class="card-body pt-0">
-										<div class="row">
-											<div class="col-7">
-												<h2 class="lead"><b>`+data[i].nama+`</b></h2>
-												<ul class="ml-4 mb-0 fa-ul text-muted">
-													<li class="small"><span class="fa-li"><i
-																class="fas fa-lg fa-building"></i></span> HP: `+data[i].hp+`</li>
-													<li class="small"><span class="fa-li"><i
-																class="fas fa-lg fa-building"></i></span> MP: `+data[i].mana+`</li>
-													<li class="small"><span class="fa-li"><i
-																class="fas fa-lg fa-building"></i></span> STR: `+data[i].str+`</li>
-													<li class="small"><span class="fa-li"><i
-																class="fas fa-lg fa-building"></i></span> DEF: `+data[i].def+`</li>
-													<li class="small"><span class="fa-li"><i
-																class="fas fa-lg fa-building"></i></span> Lvl: `+data[i].level+`</li>
-												</ul>
-											</div>
-											<div class="col-5 text-center">
-												<img src="`+img+`" alt="user-avatar"
-													class="img-circle img-fluid imgply`+i+`">
-											</div>
-										</div>
-									</div>
-									<div class="card-footer">
-										<div class="text-right">
-											<a href="#" class="btnWin`+i+` btn btn-sm btn-danger">
-												<i class="fas fa-user"></i> Lose
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>`
-                          $(".data_user").html(html)
-                      }) //each
-                  } //success
-              }) //ajax
-		$(document).ready(function(){
+        $.ajax({
+        url:url,
+        type:'POST',
+        success: function(result){
+            var data = JSON.parse(result)
+            var html = ''
+            var img1 = "<?=base_url('assets/p1.png')?>"
+            var img2 = "<?=base_url('assets/p2.png')?>"
+            var user = data.length
+            $.each(data,function(i){
+                html += `<div class="col-12 col-sm-6 col-md-6 d-flex align-items-stretch flex-column">
+                        <div class="card bg-light d-flex flex-fill">
+                            <div class="card-header text-muted border-bottom-0">
+                                Pemain `+parseInt(i+1)+`
+                            </div>
+                            <div class="card-body pt-0">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <h2 class="lead"><b>`+data[i].nama+`</b></h2>
+                                        <ul class="ml-4 mb-0 fa-ul text-muted">
+                                            <li class="small"><span class="fa-li"><i
+                                                        class="fas fa-lg fa-building"></i></span> HP: `+data[i].hp+`</li>
+                                            <li class="small"><span class="fa-li"><i
+                                                        class="fas fa-lg fa-building"></i></span> MP: `+data[i].mana+`</li>
+                                            <li class="small"><span class="fa-li"><i
+                                                        class="fas fa-lg fa-building"></i></span> STR: `+data[i].str+`</li>
+                                            <li class="small"><span class="fa-li"><i
+                                                        class="fas fa-lg fa-building"></i></span> DEF: `+data[i].def+`</li>
+                                            <li class="small"><span class="fa-li"><i
+                                                        class="fas fa-lg fa-building"></i></span> Lvl: `+data[i].level+`</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-5 text-center">
+                                        <img src="`+img1+`" alt="user-avatar"
+                                            class="img-circle img-fluid">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer hide">
+                                <div class="text-right">
+                                    <a href="#" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-user"></i> Lose
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+                    $(".data_user").html(html)
+                    console.log(html)
+                }) //each
+            } //success
+        }) //ajax
+		setInterval(() => {
 			$.ajax({
-				url: url,
-				type: 'POST',
-				success:function(result){
-					let data = JSON.parse(result)
-					let winner = []
-					$.each(data, function(i){
-						let p1 = 0
-						let p2 = 0
-						let index = 0
-							if (i % 2 == 0) {
-								let text = `Duel `+data[i].nama+` VS `+data[i+1].nama+``
-								$(".imgply"+i).attr("title",text);
-								$(".imgply"+i).tooltip("show");
-								p1 = ((data[i].hp/1000)+(data[i].mana/1000)+(data[i].str/10)+(data[i].def/10))/4
-								p2 = ((data[i+1].hp/1000)+(data[i+1].mana/1000)+(data[i+1].str/10)+(data[i+1].def/10))/4
-								index = i+1
-							} else{
-								let text = `Duel `+data[i].nama+` VS `+data[i-1].nama+``
-								$(".imgply"+i).attr("title",text);
-								$(".imgply"+i).tooltip("show");
-								p1 = ((data[i].hp/1000)+(data[i].mana/1000)+(data[i].str/10)+(data[i].def/10))/4
-								p2 = ((data[i-1].hp/1000)+(data[i-1].mana/1000)+(data[i-1].str/10)+(data[i-1].def/10))/4
-								index = i-1
-							}
-						setTimeout(() => {
-							if (p1 < p2) {
-								$(".btnWin"+index).removeClass("btn-danger")
-								$(".btnWin"+index).addClass("btn-success")
-								$(".btnWin"+index).text("Win")
-								winner.push(p2)
-							} else{
-								$(".btnWin"+i).removeClass("btn-danger")
-								$(".btnWin"+i).addClass("btn-success")
-								$(".btnWin"+i).text("Win")
-								winner.push(p1)
-							}
-						},3000)
-						
-					})
-				}
-			})
-
-			function notification(text){
-				$(document).Toasts('create', {
-					title: 'Informasi !',
-					class: 'bg-info',
-					autohide: true,
-					delay: 5000,
-					body: text
-				})
-			}
-		})
+                url: getDataUser,
+                type: "POST",
+                success:function(result){
+                    console.log(result)
+                }
+            })
+		}, 1000)
+        function insert_to_database(id_user,hp,level){
+            let url = "<?=site_url('Game/buy')?>"
+            $.post(url,{
+                type:type,
+                level:level,
+                id_user:id_user,
+                id_item:id_item
+            })
+        }
     })
 </script>
 </html>

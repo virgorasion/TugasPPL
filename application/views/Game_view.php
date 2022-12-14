@@ -40,13 +40,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								<a href="#" class="nav-link">Gold</a>
 							</li>
 							<li class="nav-item">
-								<a href="#" class="nav-link gold">0</a>
+								<a href="#" class="nav-link gold"><?=$gold?></a>
 							</li>
 							<li class="nav-item">
-								<a href="#" class="nav-link level">Level 1</a>
+								<a href="#" class="nav-link level"><?="Level ".$level?></a>
 							</li>
 							<li class="nav-item">
-								<a href="#" class="nav-link btn btn-success text-white btn_upgrade" data-toggle="tooltip" title="<?=$level*16?>">Upgrade</a>
+								<a href="#" class="nav-link btn btn-success text-white btn_upgrade" data-toggle="tooltip" title="<?="level ".(20*(2**($level-1)))?>">Upgrade</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link STR"><?="STR ".$str?></a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link HP"><?="HP ".$hp?></a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link DEF"><?="DEF ".$def?></a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link MP"><?="MP ".$mana?></a>
 							</li>
 						</ul>
 
@@ -140,14 +152,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									</div>
 									<div class="card-body">
 
-										<ul class="users-list clearfix" style="margin-bottom:0px">
-											<?php foreach($item_item as $item): ?>
-											<li class="equip" style="width:120px;cursor:pointer;padding:0px"data-type="equip" data-nama="<?=$item->nama_item?>" data-harga="<?=$item->harga?>" data-id="<?=$item->id?>" data-hp="<?=$item->inc_hp?>" data-mp="<?=$item->inc_mana?>" data-def="<?=$item->inc_def?>" data-str="<?=$item->inc_str?>" data-toggle="tooltip" title="<?="HP = +".$item->inc_hp." | "."MP = +".$item->inc_mana." | "."DEF = +".$item->inc_def." | "."STR = +".$item->inc_str?>">
-												<img src="<?=base_url('assets/dist/img/user1-128x128.jpg')?>" width="70" height="70" alt="User Image">
-												<span class="users-list-name text-xs"><?=$item->nama_item?></span>
-												<span class="users-list-date"><?=$item->harga?></span>
-											</li>
-											<?php endforeach ?>
+										<ul class="users-list clearfix data_item" style="margin-bottom:0px">
+											
 										</ul>
 									</div>
 								</div>
@@ -158,14 +164,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									</div>
 									<div class="card-body">
 
-										<ul class="users-list clearfix" style="margin-bottom:0px">
-											<?php foreach($skill_item as $skill): ?>
-											<li class="skill" style="width:120px;cursor:pointer;padding:0px" data-type="skill" data-nama="<?=$skill->nama_skill?>" data-harga="<?=$skill->harga?>" data-id="<?=$skill->id?>" data-str="<?=$skill->str?>" data-cd="<?=$skill->cooldown?>" data-mp_use="<?=$skill->mana_usage?>" data-toggle="tooltip" title="<?="STR = +".$skill->str." | "."CD = ".$skill->cooldown." Sec | "."MP USAGE= +".$skill->mana_usage?>">
-												<img src="<?=base_url('assets/dist/img/user1-128x128.jpg')?>" width="70" height="70" alt="User Image">
-												<span class="users-list-name text-xs"><?=$skill->nama_skill?></span>
-												<span class="users-list-date"><?=$skill->harga?></span>
-											</li>
-											<?php endforeach ?>
+										<ul class="users-list clearfix data_skill" style="margin-bottom:0px">
+											
 										</ul>
 									</div>
 								</div>
@@ -221,22 +221,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			var nama = "<?= $_SESSION['nama'] ?>"
 
 			// Variable Game
-			var gold = parseInt(<?= $gold ?>);
-			var gold_rank = 1
+			var gold_user = parseInt(<?= $gold ?>);
 			var level = parseInt(<?= $level ?>);
+			var inc_gold = 1*(2**(level-1));
 			var hp = parseInt(<?= $hp ?>);
 			var mana = parseInt(<?= $mana ?>);
 			var str = parseInt(<?= $str ?>);
 			var tidur = parseInt(<?= $tidur ?>);
 			var def = parseInt(<?= $def ?>);
 
+			function turnamen() {
+				setTimeout(() => {
+					let url = "<?= site_url("Game/insertAttribut") ?>"
+					$.post(url,{
+						id:id_user,
+						gold:gold_user,
+						level:level,
+						hp:hp,
+						mana:mana,
+						str:str,
+						tidur:tidur,
+						def:def
+					});
+					window.location = "<?= site_url("Game/turnamen") ?>"
+				}, 120000);
+			}
+			turnamen();
+
 			setInterval(() => {
-				if (level == 1) {
-					gold += 1
-				}else{
-					gold += gold_rank * 2
-				}
-				$(".gold").text(gold)
+				gold_user += inc_gold;
+				$(".gold").text(gold_user)
+				console.log(inc_gold)
 			}, 1000);
 
 			// Update Data User Ke Database
@@ -244,7 +259,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				let url = "<?= site_url("Game/insertAttribut") ?>"
 				$.post(url,{
 					id:id_user,
-					gold:gold,
+					gold:gold_user,
 					level:level,
 					hp:hp,
 					mana:mana,
@@ -252,22 +267,53 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					tidur:tidur,
 					def:def
 				})
-			}, 5000);
+				$(".STR").text("STR "+str)
+				$(".HP").text("HP "+hp)
+				$(".DEF").text("DEF "+def)
+				$(".MP").text("MP "+mana)
+			}, 1000);
 
-			// setInterval(() => {
-			// 	let url = "<?= site_url("Game/insertAttribut") ?>"
-			// 	$.post(url,{
-			// 		id:id_user,
-			// 		gold:gold,
-			// 		level:level,
-			// 		hp:hp,
-			// 		mana:mana,
-			// 		str:str,
-			// 		tidur:tidur,
-			// 		def:def
-			// 	})
-			// 	window.location = "<?= site_url("Game/turnamen") ?>"
-			// }, 300000);
+			// Data Ajax Perlengkapan
+			function reloadItem(){
+				let image = "<?=base_url('assets/dist/img/user1-128x128.jpg')?>"
+				$.ajax({
+					url:"<?=site_url("Game/getStoreItem")?>",
+					type:"POST",
+					success: function(result){
+						var data = JSON.parse(result)
+						var html = ""
+						$.each(data,function(i){
+							html += `<li class="equip" style="width:120px;cursor:pointer;padding:0px"data-type="equip" data-level="`+data[i].level+`" data-nama="`+data[i].nama_item+`" data-harga="`+data[i].harga+`" data-id="`+data[i].id+`" data-hp="`+data[i].inc_hp*2**(data[i].level)+`" data-mp="`+data[i].inc_mana*2**(data[i].level)+`" data-def="`+data[i].inc_def*2**(data[i].level)+`" data-str="`+data[i].inc_str*2**(data[i].level)+`" data-toggle="tooltip" title="HP = +`+data[i].inc_hp*2**(data[i].level)+` | MP = +`+data[i].inc_mana*2**(data[i].level)+` | DEF = +`+data[i].inc_def*2**(data[i].level)+` | STR = +`+data[i].inc_str*2**(data[i].level)+`">
+										<img src="`+image+`" width="70" height="70" alt="Ini Gambar Tamagoci">
+										<span class="users-list-name text-xs">`+data[i].nama_item+`</span>
+										<span class="users-list-date">`+data[i].harga*2**(data[i].level)+`</span>
+									</li>`
+							$(".data_item").html(html)
+						})
+					}
+				})
+			}
+			function reloadSkill(){
+				let image = "<?=base_url('assets/dist/img/user1-128x128.jpg')?>"
+				$.ajax({
+					url:"<?=site_url("Game/getStoreSkill")?>",
+					type:"POST",
+					success: function(result){
+						var data = JSON.parse(result)
+						var html = ""
+						$.each(data,function(i){
+							html += `<li class="skill" style="width:120px;cursor:pointer;padding:0px" data-type="skill" data-level="`+data[i].level+`" data-nama="`+data[i].nama_skill+`" data-harga="`+data[i].harga+`" data-id="`+data[i].id+`" data-dmg="`+data[i].dmg+`" data-cd="`+data[i].cooldown+`" data-mp_use="`+data[i].mana_usage+`" data-toggle="tooltip" title="DMG = +`+data[i].dmg*2**(data[i].level)+` | CD = `+data[i].cooldown+` Sec | MP USAGE= +`+data[i].dmg*2**(data[i].level)+`">
+										<img src="`+image+`" width="70" height="70" alt="User Image">
+										<span class="users-list-name text-xs">`+data[i].nama_skill+`</span>
+										<span class="users-list-date">`+data[i].harga*2**(data[i].level)+`</span>
+									</li>`
+							$(".data_skill").html(html)
+						})
+					}
+				})
+			}
+			reloadSkill()
+			reloadItem()
 
 			// Reload Chat Interval setiap 1 detik
 			setInterval(() => {
@@ -296,7 +342,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			}, 1000);
 
 			// Fungsi Chat
-			$("#sendMsg").click(function() {
+			function sendMsg(){
 				let pesan = $("#msg").val();
 				let url = "<?= site_url('Game/sendChat') ?>";
 				let msgBox = document.querySelector("#chat_content")
@@ -308,12 +354,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				})
 				$("#msg").val("")
 				msgBox.scrollTop = msgBox.scrollHeight
+			}
+			$("#sendMsg").click(function() {
+				sendMsg()
+			})
+			$("#msg").keypress(function(e){
+				if (e.which == 13) {
+					sendMsg()
+				}
 			})
 
 			// Notification Setelah Membeli Item
 			$(".test").click(function() {
-				if (gold >= 300) {
-					gold -= 300;
+				if (gold_user >= 300) {
+					gold_user -= 300;
 					let msg = nama + " Telah Mempelajari Skill Fire Ball"
 					notifChat(msg)
 				}
@@ -334,50 +388,75 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			}
 
 			// Function Insert Database Saat Beli Item
-			function insert_to_database(id_item){
+			function insert_to_database(id_item,type,level){
 				let url = "<?=site_url('Game/buy')?>"
 				$.post(url,{
+					type:type,
+					level:level,
 					id_user:id_user,
 					id_item:id_item
 				})
 			}
 
 			$(".btn_upgrade").click(function(){
-				let harga = level * 25
-				if (gold > harga) {
-					gold -= harga
-					level += 1
-				}
+				upgrade_level()
 			})
 
 			$(".food,.equip,.skill").tooltip("enable")
-			$(".food,.equip,.skill").click(function(){
-				let $type = $(this).data['type']
-				let harga_item = parseInt($(this).data['harga'])
+			$(document).on("click",".food,.equip,.skill",function(){
+				let type = $(this).data('type')
+				let harga_item = parseInt($(this).data('harga'))
 				let id_item = $(this).data('id')
-				if (gold > harga_item) {
-					gold -= harga_item
-					if ($type == "food") {
+				console.log(id_item)
+				let level = parseInt($(this).data('level')) + 1
+				if (gold_user > harga_item) {
+					gold_user -= harga_item
+					if (type == "food") {
 						let nama_item = $(this).data('nama')
-						hp += parseInt($(this).data['hp'])
-						mp += parseInt($(this).data['mp'])
-						insert_to_database(id_item)
+						hp += parseInt($(this).data('hp'))
+						mana += parseInt($(this).data('mp'))
 						notifChat(nama+" Telah Membeli Makanan "+nama_item)
-					}else if ($type == "equip"){
+					}else if (type == "equip"){
 						let nama_item = $(this).data('nama')
-						hp += parseInt($(this).data['hp'])
-						mp += parseInt($(this).data['mp'])
-						def += parseInt($(this).data['def'])
-						str += parseInt($(this).data['str'])
-						insert_to_database(id_item)
+						hp += parseInt($(this).data('hp'))
+						mana += parseInt($(this).data('mp'))
+						def += parseInt($(this).data('def'))
+						str += parseInt($(this).data('str'))
+						insert_to_database(id_item,type,level)
 						notifChat(nama+" Telah Membeli Perlengkapan "+nama_item)
-					}else if($type == "skill") {
+						reloadItem()
+					}else if(type == "skill") {
 						let nama_item = $(this).data('nama')
-						insert_to_database(id_item)
+						insert_to_database(id_item,type,level)
 						notifChat(nama+" Telah Mempelajari Skill "+nama_item)
+						reloadSkill()
 					}
 				}
 			})
+			function upgrade_level(){
+				let harga = 20*(2**(level-1))
+				if (gold_user >= harga) {
+					gold_user -= harga
+					harga = 20*(2**(level))
+					level += 1
+					inc_gold = 1*(2**(level-1))
+					$(".btn_upgrade").removeAttr("title")
+					$(".btn_upgrade").attr("title",harga)
+					$(".level").text("Level "+level)
+				}else{
+					let text = "Gold Yang Kamu Miliki Belum Cukup";
+					notification(text)
+				}
+			}
+			function notification(text){
+				$(document).Toasts('create', {
+					title: 'Informasi !',
+					class: 'bg-info',
+					autohide: true,
+					delay: 1500,
+					body: text
+				})
+			}
 		})
 	</script>
 
